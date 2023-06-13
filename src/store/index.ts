@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
+import { RootState } from './type';
 
-const store = createStore({
+const store = createStore<RootState>({
     state: {
         token: null
     },

@@ -33,7 +33,6 @@ const checkUserIsExists = async (req, res, next) => {
 
 const crpytPassword = async (req, res, next) => {   // 密码加密
     const { password } = req.body;
-
     if (password) { // 有密码就加密
         const salt = bcrpty.genSaltSync(10);
         const hash = bcrpty.hashSync(password, salt);    // hash保存的是密文

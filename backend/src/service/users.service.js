@@ -3,8 +3,7 @@ const Users = require('../model/users.model');  // 导入视图，对数据库�
 class UsersService {
     async createUser({ username, password }) {
         // 创建用户并保存在数据库中
-        const res = await Users.create({ username, password });
-        return res.dataValues;
+        await Users.create({ username, password });
     }
     async deleteUser(id) {
         // 返回被删除的行数

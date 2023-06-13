@@ -7,6 +7,7 @@ const { JWT_SECRET } = require('../config/config.default')
 class UsersController {
     async registry(req, res) {
         const { username, password } = req.body;
+
         try {
             await createUser({ username, password });
             res.send(RegistrySuccess);

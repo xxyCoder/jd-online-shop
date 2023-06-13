@@ -20,13 +20,17 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import type { FormInstance, FormRules } from 'element-plus'
-import { toLogin } from '@/service/user';
+import { useStore } from 'vuex';
+import { FormInstance, FormRules, ElLoading } from 'element-plus'
+import { toLogin } from '../service/user';
+import { result } from '../service/type';
+import { RootState } from '../store/type'
 
+const store = useStore<RootState>();
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
-    name: '请输入用户名',
+    name: '',
     pass: ""
 });
 const router = useRouter();
@@ -47,7 +51,7 @@ const rules = reactive<FormRules>({
     pass: [{ validator: validatePass, trigger: 'blur' }]
 })
 
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid) => {
         if (valid) {
@@ -57,7 +61,20 @@ const submitForm = (formEl: FormInstance | undefined) => {
             return false
         }
     })
-    toLogin(ruleForm.name, ruleForm.pass);
+    const loadingInstance = ElLoading.service({
+        text: "登录中...",
+        background: 'rgba(0, 0, 0, 0.7)'
+    });
+    try {
+        const res: unknown = await toLogin(ruleForm.name, ruleForm.pass);
+        const token: string = (res as result).token as string;
+        store.state.token = token;  // 保存token
+        router.replace({ path: '/' });  // 登录成功跳转到首页
+    } catch (err: any) {
+        window.alert(err.message);
+        console.log(err);
+    }
+    loadingInstance.close();
 }
 
 const resetForm = (formEl: FormInstance | undefined) => {
