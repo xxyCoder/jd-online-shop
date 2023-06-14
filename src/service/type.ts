@@ -1,5 +1,6 @@
-export interface result {
+export interface IResult {
     code: number,
     message: string,
-    token?: string
+    token?: string,
+    result?: any
 }

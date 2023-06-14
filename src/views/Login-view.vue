@@ -20,13 +20,10 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex';
 import { FormInstance, FormRules, ElLoading } from 'element-plus'
 import { toLogin } from '../service/user';
-import { result } from '../service/type';
-import { RootState } from '../store/type'
+import { IResult } from '../service/type';
 
-const store = useStore<RootState>();
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
@@ -67,8 +64,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     });
     try {
         const res: unknown = await toLogin(ruleForm.name, ruleForm.pass);
-        const token: string = (res as result).token as string;
-        store.state.token = token;  // 保存token
+        const token: string = (res as IResult).token as string;
+        localStorage.setItem('token', token) // 保存token
         router.replace({ path: '/' });  // 登录成功跳转到首页
     } catch (err: any) {
         window.alert(err.message);
@@ -93,6 +90,9 @@ const toRegistryPage = () => {
     grid-template-rows: 1fr 1fr 1fr;
 
     .el-form {
+        border-radius: 10px;
+        box-shadow: 0 0 5px 1px black;
+        border: 1px solid black;
         grid-row: 2;
         grid-column: 2 / 4;
     }

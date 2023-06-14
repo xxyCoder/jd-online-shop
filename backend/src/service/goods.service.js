@@ -33,6 +33,20 @@ class GoodsService {
             where: whereOp
         });
     }
+    async getAllGoods() {
+        let data = await Goods.findAll();
+        data = [...data];   // 避免空造成操作不一致
+        return data.map(d => d.dataValues);
+    }
+    async getMyGoods(userId) {
+        let data = await Goods.findAll({
+            where: {
+                userId
+            }
+        });
+        data = [...data];
+        return data.map(d => d.dataValues);
+    }
 }
 
 module.exports = new GoodsService();

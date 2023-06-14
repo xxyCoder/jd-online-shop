@@ -12,4 +12,9 @@
 import HeaderComponent from '../components/Header-Component.vue'
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+.el-main {
+    margin: 0;
+    padding: 0;
+}
+</style>

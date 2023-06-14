@@ -25,7 +25,7 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { FormInstance, FormRules, ElLoading } from 'element-plus'
 import { toRegistry } from '../service/user';
-import { result } from '../service/type'
+import { IResult } from '../service/type'
 
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
@@ -82,7 +82,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     });
     try {
         const res: unknown = await toRegistry(ruleForm.name, ruleForm.pass, ruleForm.checkPass);
-        window.alert((res as result).message);
+        window.alert((res as IResult).message);
 
     } catch (err: any) {
         window.alert(err.message);

@@ -1,11 +1,11 @@
 import CryptoJS from 'crypto-js'
 import axios from './index';
-import { result } from './type';
+import { IResult } from './type';
 
-export async function toLogin(username: string, password: string) {
+export function toLogin(username: string, password: string) {
     // 前端也对密码进行加密
     const hash = CryptoJS.SHA256(password);
-    return axios.post<result>('/users/login', {
+    return axios.post<IResult>('/users/login', {
         password: hash.toString(CryptoJS.enc.Hex),  // 将结果转为16进制
         username
     }, {
@@ -15,10 +15,10 @@ export async function toLogin(username: string, password: string) {
     });
 }
 
-export async function toRegistry(username: string, password: string, confirmPassword: string) {
+export function toRegistry(username: string, password: string, confirmPassword: string) {
     const hash1 = CryptoJS.SHA256(password);
     const hash2 = CryptoJS.SHA256(confirmPassword);
-    return axios.post<result>('/users/registry', {
+    return axios.post<IResult>('/users/registry', {
         username,
         password: hash1.toString(CryptoJS.enc.Hex),
         confirmPassword: hash2.toString(CryptoJS.enc.Hex)

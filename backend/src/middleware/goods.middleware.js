@@ -11,7 +11,7 @@ const saveImage = async (req, res, next) => {
     // 构建新的文件名（保留原有的后缀名）
     const newFileName = filePath.name + ".jpg";
     const newFilePath = path.join(filePath.dir, newFileName);
-    req.body.image = newFilePath;
+    req.body.image = newFileName;
     // 重命名文件
     try {
         fs.renameSync(file.path, newFilePath);
@@ -65,7 +65,11 @@ const checkOpIsValid = async (req, res, next) => {
 
 const checkArgAllIsNull = async (req, res, next) => {
     const { name, price, quantity, newName } = req.body;
-    if (!name && !price && !quantity && newName) {
+    if (!name) {
+        res.send(ArgsIsInvalid);
+        return;
+    }
+    if (!price && !quantity && !newName) {
         res.send(ArgsIsNull);
         return;
     }
@@ -73,7 +77,7 @@ const checkArgAllIsNull = async (req, res, next) => {
         res.send(ArgsIsInvalid);
         return;
     }
-    if (quantity && quantity === 0) {    // 小于0表示减少，大于0表示新增数量
+    if (quantity && quantity <= 0) {
         res.send(ArgsIsInvalid);
         return;
     }
