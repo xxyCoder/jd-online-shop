@@ -101,7 +101,7 @@ const toLoginPage = () => {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .registry {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;

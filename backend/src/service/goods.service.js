@@ -33,8 +33,14 @@ class GoodsService {
             where: whereOp
         });
     }
-    async getAllGoods() {
-        let data = await Goods.findAll();
+    async getAllGoods({ count, offset }) {
+        // 做类型转换，变为数字型，不然报错
+        count = +count;
+        offset = +offset;
+        let data = await Goods.findAll({
+            offset,
+            limit: count
+        });
         data = [...data];   // 避免空造成操作不一致
         return data.map(d => d.dataValues);
     }

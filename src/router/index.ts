@@ -18,14 +18,6 @@ const routes: Array<RouteRecordRaw> = [
                 component: GoodView
             },
             {
-                path: '/user',
-                name: 'user',
-                component: () => import('../views/User-view.vue'),
-                meta: {
-                    requireAuth: true
-                }
-            },
-            {
                 path: '/cart',
                 name: 'cart',
                 component: () => import('../views/Cart-view.vue'),
@@ -74,6 +66,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Registry-view.vue'),
         meta: {
             requireAuth: false
+        }
+    },
+    {
+        path: '/modifyInfo',
+        name: 'modifyInfo',
+        component: () => import('@/views/Info-view.vue'),
+        meta: {
+            requireAuth: true
         }
     }
 ]

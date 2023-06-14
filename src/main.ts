@@ -22,7 +22,10 @@ import {
     ElRadioGroup,
     ElCard,
     ElTable,
-    ElTableColumn
+    ElTableColumn,
+    ElDropdown,
+    ElDropdownItem,
+    ElDropdownMenu
 } from 'element-plus'
 import App from './App.vue'
 import 'element-plus/dist/index.css';
@@ -53,4 +56,7 @@ app
     .use(ElCard)
     .use(ElTable)
     .use(ElTableColumn)
+    .use(ElDropdown)
+    .use(ElDropdownItem)
+    .use(ElDropdownMenu)
     .mount('#app')

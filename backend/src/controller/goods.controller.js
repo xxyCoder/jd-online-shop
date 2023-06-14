@@ -43,8 +43,9 @@ class GoodsController {
             res.send(ModifyGoodError);
         }
     }
-    async getAll(req, res) {
-        let data = await getAllGoods();
+    async getAllWithLimits(req, res) {
+        const { count, offset } = req.query
+        let data = await getAllGoods({ count, offset });
         data = data.map(d => {
             d.image = `http://localhost:${APP_PORT}/${d.image}`;
             return d;
