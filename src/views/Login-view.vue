@@ -66,12 +66,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         const res: unknown = await toLogin(ruleForm.name, ruleForm.pass);
         const token: string = (res as IResult).token as string;
         localStorage.setItem('token', token) // 保存token
+        loadingInstance.close();
         router.replace({ path: '/' });  // 登录成功跳转到首页
     } catch (err: any) {
+        loadingInstance.close();
         window.alert(err.message);
         console.log(err);
     }
-    loadingInstance.close();
+    
 }
 
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -90,9 +92,10 @@ const toRegistryPage = () => {
     grid-template-rows: 1fr 1fr 1fr;
 
     .el-form {
-        border-radius: 10px;
-        box-shadow: 0 0 5px 1px black;
         border: 1px solid black;
+        border-radius: 10px;
+        box-shadow: 0 0 10px 10px #ccc;
+        padding: 12px;
         grid-row: 2;
         grid-column: 2 / 4;
     }

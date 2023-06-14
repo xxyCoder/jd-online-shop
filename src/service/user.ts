@@ -2,6 +2,8 @@ import CryptoJS from 'crypto-js'
 import axios from './index';
 import { IResult } from './type';
 
+const token = localStorage.getItem('token');
+
 export function toLogin(username: string, password: string) {
     // 前端也对密码进行加密
     const hash = CryptoJS.SHA256(password);
@@ -27,4 +29,15 @@ export function toRegistry(username: string, password: string, confirmPassword: 
             'Content-Type': 'application/json'
         }
     });
+}
+
+export function modifyInfo(username: string | null, password: string | null) {
+    return axios.post('/users/changeInfo', {
+        username,
+        password
+    }, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
 }

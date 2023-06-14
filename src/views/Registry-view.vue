@@ -108,9 +108,10 @@ const toLoginPage = () => {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 
     .el-form {
-        border-radius: 10px;
-        box-shadow: 0 0 5px 1px black;
         border: 1px solid black;
+        border-radius: 10px;
+        box-shadow: 0 0 10px 10px #ccc;
+        padding: 12px;
         grid-row: 2;
         grid-column: 2 / 4;
     }
