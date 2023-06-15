@@ -4,11 +4,12 @@ class GoodsService {
     async addGood({ name, price, quantity, image, userId }) {
         await Goods.create({ name, price, quantity, image, userId });
     }
-    async getGoodInfo({ name }) {
+    async getGoodInfo({ name, id }) {
+        const whereOp = {};
+        name && Object.assign(whereOp, { name });
+        id && Object.assign(whereOp, { id });
         const result = await Goods.findOne({
-            where: {
-                name
-            }
+            where: whereOp
         });
         return result ? result.dataValues : null;
     }
@@ -52,6 +53,10 @@ class GoodsService {
         });
         data = [...data];
         return data.map(d => d.dataValues);
+    }
+    async getCount() {
+        const cnt = await Goods.count();
+        return cnt ? cnt : 0;
     }
 }
 

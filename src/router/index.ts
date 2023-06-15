@@ -1,7 +1,9 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import store from '@/store/index';
+import jwt from 'jsonwebtoken'
+import jwt_decode from "jwt-decode";
 import HomeView from '@/views/Home-view.vue'
 import GoodView from '@/views/Good-view.vue'
+import { JwtToken } from '@/types/JWToken';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -85,8 +87,20 @@ const router = createRouter({
 
 // 开启全局路由
 router.beforeEach((to, from, next) => {
-    if (to.meta.requireAuth && !localStorage.getItem('token')) {    // 需要登录状态并且有token，那么可以跳转
-        next('/login');
+    if (to.meta.requireAuth) {    // 需要登录状态
+        const token = localStorage.getItem('token');
+        const now = new Date().getTime();
+        if (!token) {
+            next('/login');
+        } else {    // 存在则验证是否过期
+            const decodedToken = jwt_decode<JwtToken>(token);
+            const expirationTime = decodedToken?.exp * 1000; // 将秒转换为毫秒
+            if (expirationTime < now) {
+                next('/login');
+            } else {
+                next();
+            }
+        }
     } else {
         next();
     }

@@ -4,6 +4,13 @@ const { tokenExpiredError, invalidToken } = require('../constant/result.constant
 
 const auth = async (req, res, next) => {  // 验证用户
     const { authorization } = req.headers;   // token 在放在authorization中
+    if (!authorization) {
+        res.send({
+            code: 2406,
+            message: "没有token"
+        });
+        return;
+    }
     const token = authorization.replace('Bearer ', '');
     try {
         const user = jwt.verify(token, JWT_SECRET);

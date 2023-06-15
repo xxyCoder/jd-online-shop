@@ -1,5 +1,5 @@
 const { AddGoodError, deleteGoodError, ModifyGoodError } = require("../constant/result.constant");
-const { addGood, deleteGd, modifyGood, getAllGoods, getMyGoods } = require("../service/goods.service");
+const { addGood, deleteGd, modifyGood, getAllGoods, getMyGoods, getCount } = require("../service/goods.service");
 const { APP_PORT } = require('../config/config.default')
 
 class GoodsController {
@@ -67,6 +67,16 @@ class GoodsController {
             code: 3203,
             message: "获取成功",
             result: data
+        });
+    }
+    async getAllGoodsCount(req, res) {
+        const cnt = await getCount();
+        res.send({
+            code: 0,
+            message: "获取成功",
+            result: {
+                cnt
+            }
         });
     }
 }

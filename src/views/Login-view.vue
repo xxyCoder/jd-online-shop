@@ -65,15 +65,19 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     try {
         const res: unknown = await toLogin(ruleForm.name, ruleForm.pass);
         const token: string = (res as IResult).token as string;
-        localStorage.setItem('token', token) // 保存token
         loadingInstance.close();
-        router.replace({ path: '/' });  // 登录成功跳转到首页
+        if ((res as IResult).code === 1201) {
+            localStorage.setItem('token', token) // 保存token
+            router.replace({ path: '/' });  // 登录成功跳转到首页
+        } else {
+            window.alert((res as IResult).message);
+        }
     } catch (err: any) {
         loadingInstance.close();
         window.alert(err.message);
         console.log(err);
     }
-    
+
 }
 
 const resetForm = (formEl: FormInstance | undefined) => {

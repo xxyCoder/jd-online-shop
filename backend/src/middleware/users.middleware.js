@@ -50,12 +50,12 @@ const verifyLogin = async (req, res, next) => {    // 验证登录
             console.log(`${username}不存在`);
             res.send(UserIsNotExists);
             return;
-        }
-        if (!bcrpty.compareSync(password, data.password)) {    // 判断密码
+        } else if (!bcrpty.compareSync(password, data.password)) {    // 判断密码
             res.send(PasswordError);
             return;
+        } else {
+            await next();
         }
-        await next();
     } catch (e) {
         console.log(e);
         res.send(UserLoginError);

@@ -41,6 +41,14 @@ class UsersService {
         });
         return res ? res.dataValues.id : null;
     }
+    async getUserInfo(id) {
+        const res = await Users.findOne({
+            where: {
+                id
+            }
+        });
+        return res ? res.dataValues : null;
+    }
 }
 
 module.exports = new UsersService();

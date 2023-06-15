@@ -8,7 +8,10 @@ class CartsService {
         const t = await seq.transaction();
         try {
             // 先判断购物车中是否存在该商品
-            const data = await Carts.findOne({ goodId: good.id, userId });
+            let data = await Carts.findOne({
+                where: { goodId: good.id, userId }
+            });
+            data = data ? data.dataValues : null;
             // 真正能够添加的值
             let count = Math.min(good.quantity, quantity);
             if (!data) { // 不存在商品则新建
@@ -23,7 +26,7 @@ class CartsService {
             }
             // 商品放入了购物车，那么商品现存数量应该减少，增加的即为减少的，取反即可
             count = good.quantity - count;
-            await modifyGood({ name, quantity: count, userId });
+            await modifyGood({ name, quantity: count, goodId: good.id });
             // 都成功就提交事务
             t.commit();
         } catch (e) {
@@ -44,6 +47,7 @@ class CartsService {
                 }
             });
             count = good.quantity + count;
+            console.log(count);
             await modifyGood({ goodId: good.id, quantity: count, name: good.name });
             t.commit();
         } catch (e) {
@@ -60,6 +64,15 @@ class CartsService {
             }
         });
         return data ? data.dataValues : null;
+    }
+    async getAll(userId) {
+        let data = await Carts.findAll({
+            where: {
+                userId
+            }
+        });
+        data = [...data];
+        return data.map(d => d.dataValues);
     }
 }
 
