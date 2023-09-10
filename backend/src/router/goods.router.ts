@@ -1,12 +1,13 @@
-const express = require('express');
-const multer = require('multer');
-const { auth } = require('../middleware/auth.middleware');
-const { saveImage, checkArgsIsValid, checkNameIsNotNull, checkOpIsValid, checkArgAllIsNull, chechNewNameIsExists } = require('../middleware/goods.middleware');
-const { add, deleteGood, modify, getAllWithLimits, getMy, getAllGoodsCount } = require('../controller/goods.controller');
+import express from 'express';
+import multer from 'multer';
+import { auth } from '../middleware/auth.middleware';
+import { saveImage, checkArgsIsValid, checkNameIsNotNull, checkOpIsValid, checkArgAllIsNull, chechNewNameIsExists } from '../middleware/goods.middleware';
+import GoodController from '../controller/goods.controller';
 
 const router = express.Router();
-// 配置 multer 中间件，设置文件或图谱上传地址
+// // 配置 multer 中间件，设置文件或图谱上传地址
 const upload = multer({ dest: 'public/' })
+const { add, deleteGood, modify, getAllWithLimits, getMy, getAllGoodsCount } = GoodController;
 
 // 添加新商品，使用两遍是因为第一次auth验证，之后被覆盖掉，需要重新验证获取userId
 router.post('/addGood', auth, upload.single("image"), auth, saveImage, checkArgsIsValid, add);
@@ -21,4 +22,4 @@ router.get('/myGoods', auth, getMy)
 // 获取全部商品的数量
 router.get('/getAllGoodsCount', getAllGoodsCount)
 
-module.exports = router;
+export default router;

@@ -1,9 +1,8 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import jwt from 'jsonwebtoken'
 import jwt_decode from "jwt-decode";
-import HomeView from '@/views/Home-view.vue'
-import GoodView from '@/views/Good-view.vue'
-import { JwtToken } from '@/types/JWToken';
+import HomeView from '../views/Home-view.vue'
+import GoodView from '../views/Good-view.vue'
+import type { JwtToken } from '../types/index';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -33,22 +32,22 @@ const routes: Array<RouteRecordRaw> = [
                 meta: {
                     requireAuth: true
                 },
-                component: () => import('@/views/Goods-view.vue'),
+                component: () => import('../views/Goods-view.vue'),
                 children: [
                     {
                         path: '',
                         name: 'myGood',
-                        component: () => import('@/views/MyGood-view.vue')
+                        component: () => import('../views/MyGood-view.vue')
                     },
                     {
                         path: '/goods/modify',
                         name: 'modifyGood',
-                        component: () => import('@/views/Modify-view.vue')
+                        component: () => import('../views/Modify-view.vue')
                     },
                     {
                         path: '/goods/newly',
                         name: 'newlyGood',
-                        component: () => import('@/views/Newly-view.vue')
+                        component: () => import('../views/Newly-view.vue')
                     }
                 ]
             }
@@ -73,7 +72,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/modifyInfo',
         name: 'modifyInfo',
-        component: () => import('@/views/Info-view.vue'),
+        component: () => import('../views/Info-view.vue'),
         meta: {
             requireAuth: true
         }

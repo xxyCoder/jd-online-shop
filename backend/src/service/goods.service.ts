@@ -1,10 +1,10 @@
-const Goods = require('../model/goods.model');  // 导入视图，对数据库进行操作
+import Goods, { type GoodModel } from '../model/goods.model';  // 导入视图，对数据库进行操作
 
 class GoodsService {
-    async addGood({ name, price, quantity, image, userId }) {
+    async addGood({ name, price, quantity, image, userId }: { userId: number, name: string, price: number, quantity: number, image: string }) {
         await Goods.create({ name, price, quantity, image, userId });
     }
-    async getGoodInfo({ name, id }) {
+    async getGoodInfo({ name, id }: GoodModel) {
         const whereOp = {};
         name && Object.assign(whereOp, { name });
         id && Object.assign(whereOp, { id });
@@ -13,7 +13,7 @@ class GoodsService {
         });
         return result ? result.dataValues : null;
     }
-    async deleteGd({ name, userId }) {
+    async deleteGd({ name, userId }: { name: string, userId: number }) {
         const whereOp = {};
         name && Object.assign(whereOp, { name });
         userId && Object.assign(whereOp, { userId });
@@ -21,11 +21,12 @@ class GoodsService {
             where: whereOp
         });
     }
-    async modifyGood({ name, price, quantity, userId, newName }) {
+    async modifyGood({ name, price, quantity, userId, newName, goodId }: { name?: string, price?: number, quantity?: number, userId?: number; newName?: string, goodId?: number }) {
         const whereOp = {}, updateOp = {};
 
         newName && Object.assign(updateOp, { name: newName });
         name && Object.assign(whereOp, { name });
+        goodId && Object.assign(whereOp, { goodId })
         price && Object.assign(updateOp, { price });
         quantity && Object.assign(updateOp, { quantity });
         userId && Object.assign(whereOp, { userId });
@@ -34,10 +35,7 @@ class GoodsService {
             where: whereOp
         });
     }
-    async getAllGoods({ count, offset }) {
-        // 做类型转换，变为数字型，不然报错
-        count = +count;
-        offset = +offset;
+    async getAllGoods({ count, offset }: { count: number; offset: number }) {
         let data = await Goods.findAll({
             offset,
             limit: count
@@ -45,7 +43,7 @@ class GoodsService {
         data = [...data];   // 避免空造成操作不一致
         return data.map(d => d.dataValues);
     }
-    async getMyGoods(userId) {
+    async getMyGoods(userId: number) {
         let data = await Goods.findAll({
             where: {
                 userId
@@ -60,4 +58,4 @@ class GoodsService {
     }
 }
 
-module.exports = new GoodsService();
+export default new GoodsService();

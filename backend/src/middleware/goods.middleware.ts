@@ -1,31 +1,36 @@
-const fs = require('fs');
-const path = require('path');
-const { ImageUploadError, ArgsIsNull, ArgsIsInvalid, GoodNameIsExists, GoodIsNotExists, Nojurisdiction } = require('../constant/result.constant');
-const { getGoodInfo } = require('../service/goods.service');
+import fs from 'fs';
+import path from 'path';
+import type { Request, Response, NextFunction } from 'express'
+import { ArgsHasNull, ArgsIsInvalid, GoodNameIsExists, Nojurisdiction, GoodIsNotExists, serverError } from '../constant/result.constant';
+import GoodService from '../service/goods.service';
 
-const saveImage = async (req, res, next) => {
+const { getGoodInfo } = GoodService;
+
+const saveImage = async (req: Request, res: Response, next: NextFunction) => {
     // 获取上传的文件信息
     const file = req.file;
-    // 解析文件路径和文件名
-    const filePath = path.parse(file.path);
-    // 构建新的文件名（保留原有的后缀名）
-    const newFileName = filePath.name + ".jpg";
-    const newFilePath = path.join(filePath.dir, newFileName);
-    req.body.image = newFileName;
-    // 重命名文件
-    try {
-        fs.renameSync(file.path, newFilePath);
-        await next();
-    } catch (e) {
-        console.log(e);
-        res.send(ImageUploadError);
+    if (file) {
+        // 解析文件路径和文件名
+        const filePath = path.parse(file.path);
+        // 构建新的文件名（保留原有的后缀名）
+        const newFileName = filePath.name + ".jpg";
+        const newFilePath = path.join(filePath.dir, newFileName);
+        req.body.image = newFileName;
+        // 重命名文件
+        try {
+            fs.renameSync(file.path, newFilePath);
+            next();
+        } catch (e) {
+            res.send(serverError)
+            console.error(e);
+        }
     }
 }
 
-const checkArgsIsValid = async (req, res, next) => {
+const checkArgsIsValid = async (req: Request, res: Response, next: NextFunction) => {
     const { name, price, quantity } = req.body;
     if (!name || !price || !quantity) {
-        res.send(ArgsIsNull);
+        res.send(ArgsHasNull);
         return;
     }
     if (price <= 0 || quantity <= 0) {
@@ -37,19 +42,19 @@ const checkArgsIsValid = async (req, res, next) => {
         res.send(GoodNameIsExists);
         return;
     }
-    await next();
+    next();
 }
 
-const checkNameIsNotNull = async (req, res, next) => {
+const checkNameIsNotNull = async (req: Request, res: Response, next: NextFunction) => {
     const { name } = req.body;
     if (!name) {
         res.send(ArgsIsInvalid);
         return;
     }
-    await next();
+    next();
 }
 
-const checkOpIsValid = async (req, res, next) => {
+const checkOpIsValid = async (req: Request, res: Response, next: NextFunction) => {
     const { name, id } = req.body;
     const good = await getGoodInfo({ name });
     if (good === null) {
@@ -60,17 +65,17 @@ const checkOpIsValid = async (req, res, next) => {
         res.send(Nojurisdiction);
         return;
     }
-    await next();
+    next();
 }
 
-const checkArgAllIsNull = async (req, res, next) => {
+const checkArgAllIsNull = async (req: Request, res: Response, next: NextFunction) => {
     const { name, price, quantity, newName } = req.body;
     if (!name) {
         res.send(ArgsIsInvalid);
         return;
     }
     if (!price && !quantity && !newName) {
-        res.send(ArgsIsNull);
+        res.send(ArgsHasNull);
         return;
     }
     if (price && price <= 0) {
@@ -81,10 +86,10 @@ const checkArgAllIsNull = async (req, res, next) => {
         res.send(ArgsIsInvalid);
         return;
     }
-    await next();
+    next();
 }
 
-const chechNewNameIsExists = async (req, res, next) => {
+const chechNewNameIsExists = async (req: Request, res: Response, next: NextFunction) => {
     const { newName } = req.body;
     if (newName) {
         const good = await getGoodInfo({ name: newName });
@@ -93,10 +98,10 @@ const chechNewNameIsExists = async (req, res, next) => {
             return;
         }
     }
-    await next();
+    next();
 }
 
-module.exports = {
+export {
     saveImage,
     checkArgsIsValid,
     checkNameIsNotNull,

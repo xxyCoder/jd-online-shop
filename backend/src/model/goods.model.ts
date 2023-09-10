@@ -1,7 +1,15 @@
-const { DataTypes } = require('sequelize');
-const seq = require('../database/seq.database');
+import { DataTypes, Model, ForeignKey, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize'; // 导入数据类型
+import seq from '../database/seq.database';
+import Users from './users.model';
 
-const Users = require('./users.model');
+export type GoodModel = Partial<{
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
+    userId: number;
+}>;
 
 const Goods = seq.define('good', {
     name: {
@@ -30,6 +38,7 @@ const Goods = seq.define('good', {
 
 Goods.belongsTo(Users, { onDelete: 'cascade' });
 
+
 // Goods.sync({ force: true });
 
-module.exports = Goods
+export default Goods;

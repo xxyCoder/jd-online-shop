@@ -1,12 +1,14 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
+import env from '../config/config.default'
+
 const {
     MYSQL_HOST,
     MYSQL_USER,
     MYSQL_PASSWORD,
     MYSQL_DATABASE
-} = require('../config/config.default.js')
+} = env;
 
-const seq = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, {
+const seq = new Sequelize(MYSQL_DATABASE!, MYSQL_USER!, MYSQL_PASSWORD, {
     host: MYSQL_HOST,
     dialect: 'mysql'
 });
@@ -14,8 +16,9 @@ const seq = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, {
 // 测试是否成功
 // seq.authenticate().then(() => {
 //     console.log('success');
+
 // }).catch(err => {
 //     console.log(err);
-// }) 
+// })
 
-module.exports = seq;
+export default seq;

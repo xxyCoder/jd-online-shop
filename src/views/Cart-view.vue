@@ -29,7 +29,7 @@ import {
 } from '@element-plus/icons-vue'
 import { addToCart, getAllGoodFromCart, removeFromCart } from "../service/cart";
 import { IResult } from "../service/type";
-import { Good } from "../types/good";
+import type { Good } from "../types/index";
 
 interface IData {
     [propName: string]: Good[];

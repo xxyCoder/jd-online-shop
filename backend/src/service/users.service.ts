@@ -1,11 +1,12 @@
-const Users = require('../model/users.model');  // 导入视图，对数据库进行操作
+import Users from '../model/users.model';  // 导入视图，对数据库进行操作
+import type { UserModel } from '../model/users.model'
 
 class UsersService {
-    async createUser({ username, password }) {
+    async createUser({ username, password }: { username: string, password: string }) {
         // 创建用户并保存在数据库中
         await Users.create({ username, password });
     }
-    async deleteUser(id) {
+    async deleteUser(id: number) {
         // 返回被删除的行数
         const count = await Users.destroy({
             where: {
@@ -14,7 +15,7 @@ class UsersService {
         });
         return count;
     }
-    async userIsExists({ username, password }) {    // 即可查询是否存在该用户，也可以验证用户名密码是否正确
+    async userIsExists({ username, password }: UserModel) {    // 即可查询是否存在该用户，也可以验证用户名密码是否正确
         const whereOp = {};
         username && Object.assign(whereOp, { username });
         password && Object.assign(whereOp, { password });
@@ -23,7 +24,7 @@ class UsersService {
         });
         return res ? res.dataValues : null;
     }
-    async modifyUserInfo({ id, username, password }) {  // 根据用户id，可以修改用户名或密码，或者都修改
+    async modifyUserInfo({ id, username, password }: UserModel) {  // 根据用户id，可以修改用户名或密码，或者都修改
         const whereOp = { id };
         const updateOp = {};
         username && Object.assign(updateOp, { username });
@@ -33,7 +34,7 @@ class UsersService {
         });
         return res;
     }
-    async getUserId(username) {
+    async getUserId(username: string) {
         const res = await Users.findOne({
             where: {
                 username
@@ -41,7 +42,7 @@ class UsersService {
         });
         return res ? res.dataValues.id : null;
     }
-    async getUserInfo(id) {
+    async getUserInfo(id: number) {
         const res = await Users.findOne({
             where: {
                 id
@@ -51,4 +52,4 @@ class UsersService {
     }
 }
 
-module.exports = new UsersService();
+export default new UsersService();
